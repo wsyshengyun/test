@@ -10,15 +10,29 @@ engine = create_engine("sqlite:///:memeory:", echo=True)
 Base = declarative_base(engine)
 
 
-class Parent(Base):
-    __tablename__ = "parent"
+class User(Base):
+    __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     name = Column(String(10))
+    password = Column(String(10))
+
+
+
+    def __repr__(self):
+        return "<User(id='%d', name='%s', password='%s')>" % (self.id, self.name, self.password)
+
 
 # 创建数据库表
-Parent.metadata.create_all(engine)
+User.metadata.create_all(engine)
 # 运行后会在本地数据库创建一个数据库表
 
+#创建会话
+Session = sessionmaker(bind=engine)
+session = Session()
 
+# 持久化实例对象
+ed_user = User(id=1, name='xiexiaolu', password = 'dianwo')
+Session.add(ed_user)
+session.commit()
 
 
